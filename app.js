@@ -1,23 +1,64 @@
-const getNotes = require('./notes');
-//const validator = require('validator');
 const chalk = require('chalk');
+const yargs = require('yargs');
+const notes = require('./notes.js');
 
-const msg = getNotes();
-console.log(msg);
-// console.log(validator.isURL('https://mead.io'));
-console.log(chalk.green('success!'));
+yargs.command({
+    command : "add",
+    describe : "Add a new note",
+    builder : {
+        title : {
+            describe : "Note title",
+            demandOption : true,
+            type : 'string'
+        },
+        body : {
+            describe : "Note body",
+            demandOption : true,
+            type : 'string'
+        }
+    },
+    handler(argv){
+        notes.addNote(argv.title , argv.body);
+    }
+});
 
+yargs.command({
+    command : "remove",
+    describe : "Remove a new note",
+    builder : {
+        title : {
+            describe : "Note title",
+            demandOption : true,
+            type : 'string'
+        }
+    },
+    handler(argv){
+        notes.removeNote(argv.title);
+    }
+});
 
+yargs.command({
+    command : "list",
+    describe : "List notes",
+    handler(){
+        notes.listNotes();
+    }
+});
 
+yargs.command({
+    command : "read",
+    describe : "Read a new note",
+    builder : {
+        title : {
+            describe : "Note title",
+            demandOption : true,
+            type : 'string'
+        }
+    },
+    handler(argv){
+        notes.readNote(argv.title)
+    }
+});
 
-
-
-
-
-
-// const add = require('./utils.js');
-
-// const res = add(1,2);
-
-// console.log(res);
-
+yargs.parse();
+//console.log(yargs.argv);
